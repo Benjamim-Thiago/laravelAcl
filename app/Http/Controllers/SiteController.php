@@ -8,7 +8,7 @@ use App\Http\Requests;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
-class HomeController extends Controller
+class SiteController extends Controller
 {
     /**
      * Create a new controller instance.
@@ -27,8 +27,8 @@ class HomeController extends Controller
      */
     public function index(Post $posts)
     {
-        $posts = $posts->all();
-        return view('home', compact('posts'));
+        return redirect('/painel');
+//        return view('portal.home.index');
     }
 
     public function update($id)
@@ -36,9 +36,26 @@ class HomeController extends Controller
         $post = Post::find($id);
 
         //$this->authorize('update-post', $post);
-        if ( Gate::denies('update-post', $post) )
+        if ( Gate::denies('edit_post', $post) )
             abort(403, 'Unauthorized');
 
         return view('update-post', compact('post'));
+    }
+
+    public function rolesPermissions()
+    {
+        $nameUser = auth()->user()->name;
+
+        print( "<h1> $nameUser </h1>" );
+
+        foreach ( auth()->user()->roles as $role ) {
+            echo "<b> $role->name </b> -> ";
+
+            $permissions = $role->permissions;
+            foreach ( $permissions as $permission ) {
+                echo "$permission->name, ";
+            }
+        echo '<hr>';
+        }
     }
 }

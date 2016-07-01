@@ -1,27 +1,27 @@
 <?php
 
-/*
-|--------------------------------------------------------------------------
-| Application Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register all of the routes for an application.
-| It's a breeze. Simply tell Laravel the URIs it should respond to
-| and give it the controller to call when that URI is requested.
-|
-*/
+Route::group(['prefix' => 'painel'], function () {
 
-Route::get('/', function () {
-    return view('welcome');
+    //PostController
+    Route::get('posts', 'Painel\PostController@index');
+
+    //PermissionController
+    Route::get('permissions', 'Painel\PermissionController@index');
+    Route::get('permission/roles/{id}', 'Painel\PermissionController@roles');
+
+    //RoleController
+    Route::get('roles', 'Painel\RoleController@index');
+    Route::get('role/permissions/{id}', 'Painel\RoleController@permissions');
+
+    //UserController
+    Route::get('users', 'Painel\UserController@index');
+    Route::get('user/roles/{id}', 'Painel\UserController@roles');
+
+    //PainelController
+    Route::get('/', 'Painel\PainelController@index');
+
 });
-
-/*======================+
- *    USUÁRIO LOGADO    |
- *======================+
- */
 
 Route::auth();
 
-Route::get('/home', 'HomeController@index');
-
-Route::get('/posts/{id}/update', 'HomeController@update');
+Route::get('/', 'SiteController@index');
